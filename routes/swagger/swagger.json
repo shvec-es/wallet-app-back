@@ -1,0 +1,543 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is an online wallet server. Below you can find a detailed documentation regarding all possible requests that our online wallet server can handle. Have fun!",
+    "version": "1.0.0",
+    "title": "eWallet",
+    "contact": {
+      "email": "tisha.kruglyak@gmail.com"
+    }
+  },
+  "host": "localhost:3001",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "tags": [
+    {
+      "name": "user",
+      "description": "Operations about user"
+    },
+    {
+      "name": "wallet",
+      "description": "Access to eWallet and money operations"
+    }
+  ],
+  "paths": {
+    "/user/signup": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Registers new user",
+        "description": "This creates a new user.",
+        "operationId": "createUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created",
+            "schema": {
+              "$ref": "#/definitions/registerSuccess"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/badRequest"
+            }
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Logs user into the system",
+        "description": "This logs user in",
+        "operationId": "loginUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/LoginUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userName": {
+                  "type": "string"
+                },
+                "userId": {
+                  "type": "string"
+                },
+                "userToken": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request supplied"
+          }
+        }
+      }
+    },
+    "/user/info": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns inforamtion regarding the currently logged in user",
+        "description": "This returns user info. Requires bearer token",
+        "operationId": "infoUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userName": {
+                  "type": "string"
+                },
+                "userId": {
+                  "type": "string"
+                },
+                "userToken": {
+                  "type": "string"
+                },
+                "userEmail": {
+                  "type": "string"
+                },
+                "isActive": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request supplied",
+            "schema": {
+              "$ref": "#/definitions/badRequest"
+            }
+          },
+          "401": {
+            "$ref": "#/definitions/unauthorized"
+          }
+        }
+      }
+    },
+    "/user/logout": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Logs out current logged in user session. Requires bearer token.",
+        "description": "This logs user out",
+        "operationId": "logoutUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "401": {
+            "$ref": "#/definitions/unauthorized"
+          }
+        }
+      }
+    },
+    "/wallet/transaction": {
+      "post": {
+        "tags": [
+          "wallet"
+        ],
+        "summary": "Creates a transaction. Requires bearer token.",
+        "description": "This creates a transaction",
+        "operationId": "createTransaction",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/transactionSuccess"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/badRequest"
+            }
+          },
+          "401": {
+            "$ref": "#/definitions/unauthorized"
+          }
+        }
+      }
+    },
+    "/wallet/transaction/categories": {
+      "get": {
+        "tags": [
+          "wallet"
+        ],
+        "summary": "Request transaction categories.",
+        "description": "This returns all transactions categories for a given user. Requires bearer token.",
+        "operationId": "getTransactionsCategories",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/categoriesSuccess"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/badRequest"
+            }
+          },
+          "401": {
+            "$ref": "#/definitions/unauthorized"
+          }
+        }
+      }
+    },
+    "/wallet/transactions": {
+      "get": {
+        "tags": [
+          "wallet"
+        ],
+        "summary": "Request all users transactions.",
+        "description": "This returns all transactions for a given user. Requires bearer token.",
+        "operationId": "getTransactions",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/transactionsSuccess"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/badRequest"
+            }
+          },
+          "401": {
+            "$ref": "#/definitions/unauthorized"
+          }
+        }
+      }
+    },
+    "/wallet/stats": {
+      "get": {
+        "tags": [
+          "wallet"
+        ],
+        "summary": "Request all users transactions statistics.",
+        "description": "This returns all transactions statistics for a given user. Requires bearer token.",
+        "operationId": "getTransactionsStats",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/transactionsStatsSuccess"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/badRequest"
+            }
+          },
+          "401": {
+            "$ref": "#/definitions/unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "registerSuccess": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "userName": {
+              "type": "string"
+            },
+            "userId": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "badRequest": {
+      "type": "object",
+      "properties": {
+        "errorMessage": {
+          "type": "string"
+        }
+      }
+    },
+    "unauthorized": {
+      "description": "Unauthorized or invalid token"
+    },
+    "transactionsSuccess": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "transactions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "transactionId": {
+                    "type": "string"
+                  },
+                  "transactionAmount": {
+                    "type": "number"
+                  },
+                  "transactionDate": {
+                    "type": "string"
+                  },
+                  "currency": {
+                    "type": "string"
+                  },
+                  "commentary": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "LoginUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "transactionSuccess": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "transactionId": {
+              "type": "string"
+            },
+            "transactionAmount": {
+              "type": "number"
+            },
+            "transactionDate": {
+              "type": "string"
+            },
+            "currency": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "transactionsStatsSuccess": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "totalExpense": {
+              "type": "number"
+            },
+            "totalGain": {
+              "type": "number"
+            },
+            "categories": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "type": "string"
+                  },
+                  "sum": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "transactionAmount": {
+          "type": "number"
+        },
+        "transactionDate": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "commentary": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        }
+      }
+    },
+    "categoriesSuccess": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "categories": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

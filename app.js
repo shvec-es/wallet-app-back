@@ -14,15 +14,26 @@ app.use(express.json());
 app.use(express.static('public'))
 
 // Routes
+// VITALA
 
+
+
+
+
+
+
+//DIMON
 app.use('/api/auth', (req, res) => {
   res.send('/api/auth')
 })
 
-// /Routes
+
+
 
 //Swagger router
 app.use('/docs', swaggerRouter)
+// /Routes
+
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not Found" });

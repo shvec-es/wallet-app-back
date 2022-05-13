@@ -1,9 +1,8 @@
 import express from "express"
 import logger from "morgan"
 import cors from "cors"
-
 import swaggerRouter from './routes/swagger/index.js'
-
+import Wallet from './routes/Wallet/Wallet.js'
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -23,9 +22,7 @@ app.use(express.static('public'))
 
 
 //DIMON
-app.use('/api/auth', (req, res) => {
-  res.send('/api/auth')
-})
+app.use('/wallet', Wallet)
 
 
 

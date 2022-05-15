@@ -4,6 +4,7 @@ import cors from "cors"
 import swaggerRouter from './routes/swagger/index.js'
 import Wallet from './routes/Wallet/Wallet.js'
 import authRouter from './routes/api/auth.js'
+import usersRouter from "./routes/api/users.js";
 
 const app = express();
 
@@ -16,6 +17,9 @@ app.use(express.static('public'))
 
 // Routes
 app.use('/api/auth', authRouter);
+
+app.use('/api/users', usersRouter);
+
 app.use('/wallet', Wallet)
 
 app.use('/docs', swaggerRouter)

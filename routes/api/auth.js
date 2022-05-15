@@ -4,13 +4,9 @@ import { validateAuth } from "../../middlewares/validation.js";
 import { controlWrapper } from "../../middlewares/controlWrapper.js";
 
 
-
 const router = new express.Router();
 
-router.post(
-  '/signup',
-  controlWrapper(signup),
-);
+router.post('/signup', controlWrapper(signup));
 
 router.post('/login', controlWrapper(login));
 

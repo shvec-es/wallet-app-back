@@ -4,6 +4,10 @@ class Transactions{
     async createTransaction(req, res){
         try {
             const { _id } = req.user;
+            if(req.body.typeTransaction && !req.body.category){
+                req.body.category = "other"
+            }
+            console.log(req.body)
             const newTransaction = await WalletModel.create({...req.body, owner: _id});
             return res
                 .status(201)

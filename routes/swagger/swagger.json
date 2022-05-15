@@ -8,7 +8,7 @@
       "email": "tisha.kruglyak@gmail.com"
     }
   },
-  "host": "localhost:3001",
+  "host": "localhost:9006",
   "basePath": "/",
   "schemes": [
     "http"

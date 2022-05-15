@@ -1,7 +1,7 @@
-import express from "express"
-import Transactions from "../../controllers/transactions.js";
-import {validateAuth, validateBody} from '../../middlewares/validation.js'
-import { joiTransactionsSchema } from '../../models/Transaction-model.js'
+const express = require("express")
+const Transactions = require("../../controllers/transactions.js");
+const {validateAuth, validateBody} = require('../../middlewares/validation.js')
+const { joiTransactionsSchema } = require('../../models/Transaction-model.js')
 
 const Wallet = express.Router();
 
@@ -13,4 +13,4 @@ Wallet.get('/transactions', validateAuth, Transactions.getTransactions)
 
 Wallet.get('/stats', validateAuth, Transactions.getStats)
 
-export default Wallet;
+module.exports = Wallet;

@@ -1,12 +1,12 @@
-import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { regexName, regexEmail } from '../helpers/regex.js';
-import {
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { regexName, regexEmail } = require('../helpers/regex.js');
+const {
     USER_NAME_LIMIT,
     USER_EMAIL_LIMIT,
     USER_PASSWORD_LIMIT,
-} from '../helpers/constants.js';
+} = require('../helpers/constants.js');
 
 const {Schema, model} = mongoose
 
@@ -75,4 +75,4 @@ userSchema.methods.updateSubscription = function (newSubscription) {
 
 const User = model('user', userSchema);
 
-export { User, userSchema };
+module.exports = { User, userSchema };

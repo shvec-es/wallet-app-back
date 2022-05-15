@@ -4,4 +4,4 @@ const currentUser = async (req, res) => {
   res.json({ email, token, name });
 };
 
-export { currentUser }
+module.exports = { currentUser }

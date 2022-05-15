@@ -1,7 +1,7 @@
-import express from "express"
-import { validateAuth } from "../../middlewares/validation.js";
-import { controlWrapper } from "../../middlewares/controlWrapper.js";
-import { currentUser } from "../../controllers/currentUser.js";
+const express = require("express")
+const { validateAuth } = require("../../middlewares/validation.js");
+const { controlWrapper } = require("../../middlewares/controlWrapper.js");
+const { currentUser } = require("../../controllers/currentUser.js");
 
 
 const router = new express.Router();
@@ -10,4 +10,4 @@ const router = new express.Router();
 router.get("/current", validateAuth, controlWrapper(currentUser));
 
 
-export default router;
+module.exports = router;

@@ -1,16 +1,16 @@
 import express from "express"
 import Transactions from "../../controllers/transactions.js";
-import { validateBody } from '../../middlewares/validation.js'
+import {validateAuth, validateBody} from '../../middlewares/validation.js'
 import { joiTransactionsSchema } from '../../models/Transaction-model.js'
 
 const Wallet = express.Router();
 
-Wallet.post('/transaction',validateBody(joiTransactionsSchema), Transactions.createTransaction)
+Wallet.post('/transaction', validateAuth, validateBody(joiTransactionsSchema), Transactions.createTransaction)
 
-Wallet.get('/transaction/categories', Transactions.getCategories)
+Wallet.get('/transaction/categories', validateAuth, Transactions.getCategories)
 
-Wallet.get('/transactions', Transactions.getTransactions)
+Wallet.get('/transactions', validateAuth, Transactions.getTransactions)
 
-Wallet.get('/stats', Transactions.getStats)
+Wallet.get('/stats', validateAuth, Transactions.getStats)
 
 export default Wallet;

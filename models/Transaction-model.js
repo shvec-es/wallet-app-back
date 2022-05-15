@@ -18,10 +18,13 @@ const TransactionSchema = new Schema({
     },
     description: {
         type: String,
-        required: true
     },
     category:{
         type: String
+    },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
     }
 }, {versionKey: false,timestamps:true})
 
@@ -29,7 +32,7 @@ const joiTransactionsSchema = Joi.object({
     typeTransaction:Joi.boolean().required(),
     sum: Joi.number().required(),
     date: Joi.string().required(),
-    description: Joi.string().required(),
+    description: Joi.string(),
     category: Joi.string()
 });
 

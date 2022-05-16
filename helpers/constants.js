@@ -35,7 +35,7 @@ const MESSAGES = {
   JWTEXPIRED: 'JWT expired',
 };
 
-export {
+module.exports = {
   CONTACT_NAME_LIMIT,
   CONTACT_EMAIL_LIMIT,
   CONTACT_PHONE_LIMIT,

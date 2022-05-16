@@ -1,4 +1,4 @@
-import { WalletModel } from '../models/Transaction-model.js'
+const { WalletModel } = require('../models/Transaction-model.js')
 
 class Transactions{
     async createTransaction(req, res){
@@ -60,4 +60,4 @@ class Transactions{
     }
 }
 
-export default new Transactions
+module.exports = new Transactions

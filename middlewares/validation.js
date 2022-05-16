@@ -1,8 +1,8 @@
-import jwt from 'jsonwebtoken';
-import CreateError from 'http-errors';
-import { HTTP_STATUS_CODE, MESSAGES } from '../helpers/constants.js';
+const jwt = require('jsonwebtoken');
+const CreateError = require('http-errors');
+const { HTTP_STATUS_CODE, MESSAGES } = require('../helpers/constants.js');
 
-import { User } from '../models/User-model.js';
+const { User } = require('../models/User-model.js');
 
 const { SECRET_KEY } = process.env;
 
@@ -31,11 +31,6 @@ const validateAuth = async (req, _, next) => {
   }
 };
 
-export { validateAuth };
-
-
-
-
 const validateBody = (scheme) => async (req, res, next) => {
     try {
         await scheme.validateAsync(req.body);
@@ -47,4 +42,4 @@ const validateBody = (scheme) => async (req, res, next) => {
     }
 };
 
-export {validateBody}
+module.exports = {validateAuth, validateBody}

@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import Joi from 'joi'
+const mongoose = require("mongoose");
+const Joi = require('joi');
 
 const {Schema, model} = mongoose
 
@@ -38,4 +38,4 @@ const joiTransactionsSchema = Joi.object({
 
 const WalletModel = model('transactions', TransactionSchema)
 
-export {joiTransactionsSchema, WalletModel}
+module.exports = {joiTransactionsSchema, WalletModel}

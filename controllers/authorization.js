@@ -1,6 +1,6 @@
-import CreateError from 'http-errors';
-import { User } from '../models/User-model.js';
-import { HTTP_STATUS_CODE, STATUS } from '../helpers/constants.js';
+const CreateError = require('http-errors');
+const { User } = require('../models/User-model.js');
+const { HTTP_STATUS_CODE, STATUS } = require('../helpers/constants.js');
 
 ///////signup
 
@@ -33,7 +33,6 @@ const signup = async (req, res) => {
   });
 };
 
-export { signup };
 
 //// login 
 
@@ -61,7 +60,7 @@ const login = async (req, res) => {
   });
 };
 
-export { login };
+
 
 //// logout
 
@@ -76,4 +75,4 @@ const logout = async (req, res) => {
   });
 };
 
-export { logout };
+module.exports = { logout, login, signup };

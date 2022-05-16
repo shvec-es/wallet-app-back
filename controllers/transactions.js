@@ -54,9 +54,8 @@ class Transactions{
             }
 
         }
-        sortingTransactions.push(balance)
         balance.balance = balance.income - balance.consumption
-        return res.json({ status: "success", code: 200, payload: { sortingTransactions } });
+        return res.json({ status: "success", code: 200, payload: { sortingTransactions, balance: balance } });
     }
 }
 

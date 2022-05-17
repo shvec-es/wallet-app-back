@@ -1,21 +1,25 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is an online wallet server. Below you can find a detailed documentation regarding all possible requests that our online wallet server can handle. Have fun!",
+    "description": "This is an online wallet server. Below you can find a detailed documentation regarding all possible requests that our online wallet server can handle. Have fun!  <br /> <br /> <i>P.S. In order to see what fields are required in the request body and their types - click on the <i><strong>Model</strong></i> button next to the <i><strong>Example Value</strong></i>.</i>",
     "version": "1.0.0",
     "title": "eWallet",
     "contact": {
       "email": "tisha.kruglyak@gmail.com"
     }
   },
-  "host": "localhost:9006",
+  "host": "wallet-codewriters.herokuapp.com",
   "basePath": "/",
   "schemes": [
     "http"
   ],
   "tags": [
     {
-      "name": "user",
+      "name": "auth",
+      "description": "Operations about authorization"
+    },
+    {
+      "name": "users",
       "description": "Operations about user"
     },
     {
@@ -24,12 +28,36 @@
     }
   ],
   "paths": {
-    "/user/signup": {
+    "/api/users/current": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get information about current user",
+        "description": "This returns info regarding the currently logged-in user. <strong>Requires bearer token.</strong>",
+        "operationId": "getUserInfo",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successful user info",
+            "schema": {
+              "$ref": "#/definitions/userInfoSuccess"
+            }
+          },
+          "401": {
+            "$ref": "#/definitions/unauthorized"
+          }
+        }
+      }
+    },
+    "/api/auth/signup": {
       "post": {
         "tags": [
-          "user"
+          "auth"
         ],
-        "summary": "Registers new user",
+        "summary": "Registers new user.",
         "description": "This creates a new user.",
         "operationId": "createUser",
         "produces": [
@@ -61,13 +89,13 @@
         }
       }
     },
-    "/user/login": {
+    "/api/auth/login": {
       "post": {
         "tags": [
-          "user"
+          "auth"
         ],
-        "summary": "Logs user into the system",
-        "description": "This logs user in",
+        "summary": "Logs user into the system.",
+        "description": "This logs user in.",
         "operationId": "loginUser",
         "produces": [
           "application/json"
@@ -84,20 +112,9 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "Successful operation login",
             "schema": {
-              "type": "object",
-              "properties": {
-                "userName": {
-                  "type": "string"
-                },
-                "userId": {
-                  "type": "string"
-                },
-                "userToken": {
-                  "type": "string"
-                }
-              }
+              "$ref": "#/definitions/loginSuccess"
             }
           },
           "400": {
@@ -106,66 +123,17 @@
         }
       }
     },
-    "/user/info": {
+    "/api/auth/logout": {
       "get": {
         "tags": [
-          "user"
+          "auth"
         ],
-        "summary": "Returns inforamtion regarding the currently logged in user",
-        "description": "This returns user info. Requires bearer token",
-        "operationId": "infoUser",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "userName": {
-                  "type": "string"
-                },
-                "userId": {
-                  "type": "string"
-                },
-                "userToken": {
-                  "type": "string"
-                },
-                "userEmail": {
-                  "type": "string"
-                },
-                "isActive": {
-                  "type": "boolean"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request supplied",
-            "schema": {
-              "$ref": "#/definitions/badRequest"
-            }
-          },
-          "401": {
-            "$ref": "#/definitions/unauthorized"
-          }
-        }
-      }
-    },
-    "/user/logout": {
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Logs out current logged in user session. Requires bearer token.",
-        "description": "This logs user out",
+        "summary": "Logs out current logged in user session. ",
+        "description": "This logs user out. <strong>Requires bearer token.</strong>",
         "operationId": "logoutUser",
         "produces": [
           "application/json"
         ],
-        "parameters": [],
         "responses": {
           "200": {
             "description": "successful operation"
@@ -181,8 +149,8 @@
         "tags": [
           "wallet"
         ],
-        "summary": "Creates a transaction. Requires bearer token.",
-        "description": "This creates a transaction",
+        "summary": "Creates a transaction.",
+        "description": "This creates a transaction. <strong>Requires bearer token.</strong>",
         "operationId": "createTransaction",
         "produces": [
           "application/json"
@@ -222,12 +190,11 @@
           "wallet"
         ],
         "summary": "Request transaction categories.",
-        "description": "This returns all transactions categories for a given user. Requires bearer token.",
+        "description": "This returns all transactions categories for a given user. <strong>Requires bearer token.</strong>",
         "operationId": "getTransactionsCategories",
         "produces": [
           "application/json"
         ],
-        "parameters": [],
         "responses": {
           "200": {
             "description": "successful operation",
@@ -253,7 +220,7 @@
           "wallet"
         ],
         "summary": "Request all users transactions.",
-        "description": "This returns all transactions for a given user. Requires bearer token.",
+        "description": "This returns all transactions for a given user. <strong>Requires bearer token.</strong>",
         "operationId": "getTransactions",
         "produces": [
           "application/json"
@@ -284,12 +251,27 @@
           "wallet"
         ],
         "summary": "Request all users transactions statistics.",
-        "description": "This returns all transactions statistics for a given user. Requires bearer token.",
+        "description": "This returns all transactions statistics for a given user. <strong>Requires bearer token.</strong>",
         "operationId": "getTransactionsStats",
         "produces": [
           "application/json"
         ],
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "month",
+            "type": "number",
+            "required": true,
+            "description": "The month's number from 1 to 12."
+          },
+          {
+            "in": "query",
+            "name": "year",
+            "type": "number",
+            "required": true,
+            "description": "The year's numeric value."
+          }
+        ],
         "responses": {
           "200": {
             "description": "successful operation",
@@ -315,38 +297,50 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "example": "Avisalom Peremychniy"
         },
         "email": {
-          "type": "string"
+          "type": "string",
+          "example": "avisalom.peremychniy@mail.com"
         },
         "password": {
-          "type": "string"
+          "type": "string",
+          "example": "1234567"
         }
-      }
+      },
+      "required": [
+        "name",
+        "email",
+        "password"
+      ]
     },
     "registerSuccess": {
       "type": "object",
       "properties": {
         "status": {
-          "type": "object",
-          "properties": {
-            "code": {
-              "type": "string"
-            },
-            "message": {
-              "type": "string"
-            }
-          }
+          "type": "string",
+          "example": "success"
         },
-        "data": {
+        "code": {
+          "type": "number",
+          "example": "201"
+        },
+        "payload": {
           "type": "object",
           "properties": {
-            "userName": {
-              "type": "string"
-            },
-            "userId": {
-              "type": "string"
+            "user": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Avisalom Peremychniy"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "avisalom.peremychniy@mail.com"
+                }
+              }
             }
           }
         }
@@ -363,47 +357,112 @@
     "unauthorized": {
       "description": "Unauthorized or invalid token"
     },
+    "transactionSuccess": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "code": {
+          "type": "number",
+          "example": "201"
+        },
+        "payload": {
+          "type": "object",
+          "properties": {
+            "newTransaction": {
+              "$ref": "#/definitions/transactionResponse"
+            }
+          }
+        }
+      }
+    },
     "transactionsSuccess": {
       "type": "object",
       "properties": {
         "status": {
-          "type": "object",
-          "properties": {
-            "code": {
-              "type": "string"
-            },
-            "message": {
-              "type": "string"
-            }
-          }
+          "type": "string",
+          "example": "success"
         },
-        "data": {
+        "code": {
+          "type": "number",
+          "example": 200
+        },
+        "payload": {
           "type": "object",
           "properties": {
             "transactions": {
               "type": "array",
               "items": {
-                "type": "object",
-                "properties": {
-                  "transactionId": {
-                    "type": "string"
-                  },
-                  "transactionAmount": {
-                    "type": "number"
-                  },
-                  "transactionDate": {
-                    "type": "string"
-                  },
-                  "currency": {
-                    "type": "string"
-                  },
-                  "commentary": {
-                    "type": "string"
-                  }
+                "$ref": "#/definitions/transactionResponse"
+              },
+              "example": [
+                {
+                  "typeTransaction": true,
+                  "sum": 2598,
+                  "date": "15.05.2022",
+                  "description": "groceries",
+                  "category": "other",
+                  "owner": "21e7ab08-a674-4abf-8511-b811aee7a3f4",
+                  "_id": "e9f644a6-81f1-48ad-819d-2dc5bfdecb99",
+                  "createdAt": "2022-05-16T10:34:53.652Z",
+                  "updatedAt": "2022-05-16T10:34:53.652Z"
+                },
+                {
+                  "typeTransaction": false,
+                  "sum": 1649,
+                  "date": "14.05.2022",
+                  "description": "Bought a brand new iphone XXL plus pro max edge",
+                  "category": "squander",
+                  "owner": "21e7ab08-a674-4abf-8511-b811aee7a3f4",
+                  "_id": "e9f644f7-81f1-48ad-819d-2dc5bfdecb98",
+                  "createdAt": "2022-05-14T11:37:53.652Z",
+                  "updatedAt": "2022-05-14T11:37:53.652Z"
                 }
-              }
+              ]
             }
           }
+        }
+      }
+    },
+    "transactionResponse": {
+      "type": "object",
+      "properties": {
+        "typeTransaction": {
+          "type": "boolean"
+        },
+        "sum": {
+          "type": "number",
+          "example": 2598
+        },
+        "date": {
+          "type": "string",
+          "example": "15.05.2022"
+        },
+        "description": {
+          "type": "string",
+          "example": "groceries"
+        },
+        "category": {
+          "type": "string",
+          "example": "other"
+        },
+        "owner": {
+          "type": "string",
+          "example": "21e7ab08-a674-4abf-8511-b811aee7a3f4"
+        },
+        "_id": {
+          "type": "string",
+          "example": "e9f644a6-81f1-48ad-819d-2dc5bfdecb99"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2022-05-16T10:34:53.652Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2022-05-16T10:34:53.652Z"
         }
       }
     },
@@ -411,41 +470,84 @@
       "type": "object",
       "properties": {
         "email": {
-          "type": "string"
+          "type": "string",
+          "example": "avisalom.peremychniy@mail.com"
         },
         "password": {
-          "type": "string"
+          "type": "string",
+          "example": "1234567"
         }
-      }
+      },
+      "required": [
+        "email",
+        "password"
+      ]
     },
-    "transactionSuccess": {
+    "loginSuccess": {
       "type": "object",
       "properties": {
         "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "code": {
+          "type": "number",
+          "example": 200
+        },
+        "payload": {
           "type": "object",
           "properties": {
-            "code": {
-              "type": "string"
+            "token": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
             },
-            "message": {
-              "type": "string"
+            "user": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Avisalom Peremychniy"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "avisalom.peremychniy@mail.com"
+                }
+              }
             }
           }
+        }
+      }
+    },
+    "userInfoSuccess": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
         },
-        "data": {
+        "code": {
+          "type": "number",
+          "example": 200
+        },
+        "payload": {
           "type": "object",
           "properties": {
-            "transactionId": {
-              "type": "string"
-            },
-            "transactionAmount": {
-              "type": "number"
-            },
-            "transactionDate": {
-              "type": "string"
-            },
-            "currency": {
-              "type": "string"
+            "userInfo": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Avisalom Peremychniy"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "avisalom.peremychniy@mail.com"
+                },
+                "token": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                }
+              }
             }
           }
         }
@@ -455,36 +557,60 @@
       "type": "object",
       "properties": {
         "status": {
-          "type": "object",
-          "properties": {
-            "code": {
-              "type": "string"
-            },
-            "message": {
-              "type": "string"
-            }
-          }
+          "type": "string",
+          "example": "success"
         },
-        "data": {
+        "code": {
+          "type": "string",
+          "example": "200"
+        },
+        "payload": {
           "type": "object",
           "properties": {
-            "totalExpense": {
-              "type": "number"
-            },
-            "totalGain": {
-              "type": "number"
-            },
-            "categories": {
+            "sortingTransactions": {
               "type": "array",
               "items": {
-                "type": "object",
-                "properties": {
-                  "category": {
-                    "type": "string"
-                  },
-                  "sum": {
-                    "type": "number"
-                  }
+                "$ref": "#/definitions/transactionResponse"
+              },
+              "example": [
+                {
+                  "typeTransaction": true,
+                  "sum": 2598,
+                  "date": "15.05.2022",
+                  "description": "groceries",
+                  "category": "other",
+                  "owner": "21e7ab08-a674-4abf-8511-b811aee7a3f4",
+                  "_id": "e9f644a6-81f1-48ad-819d-2dc5bfdecb99",
+                  "createdAt": "2022-05-16T10:34:53.652Z",
+                  "updatedAt": "2022-05-16T10:34:53.652Z"
+                },
+                {
+                  "typeTransaction": false,
+                  "sum": 1649,
+                  "date": "14.05.2022",
+                  "description": "Bought a brand new iphone XXL plus pro max edge",
+                  "category": "squander",
+                  "owner": "21e7ab08-a674-4abf-8511-b811aee7a3f4",
+                  "_id": "e9f644f7-81f1-48ad-819d-2dc5bfdecb98",
+                  "createdAt": "2022-05-14T11:37:53.652Z",
+                  "updatedAt": "2022-05-14T11:37:53.652Z"
+                }
+              ]
+            },
+            "balance": {
+              "type": "object",
+              "properties": {
+                "income": {
+                  "type": "number",
+                  "example": 28945
+                },
+                "consumption": {
+                  "type": "number",
+                  "example": 12564
+                },
+                "balance": {
+                  "type": "number",
+                  "example": 16381
                 }
               }
             }
@@ -495,42 +621,49 @@
     "Transaction": {
       "type": "object",
       "properties": {
-        "transactionAmount": {
+        "typeTransaction": {
+          "type": "boolean"
+        },
+        "sum": {
           "type": "number"
-        },
-        "transactionDate": {
-          "type": "string"
-        },
-        "currency": {
-          "type": "string"
-        },
-        "commentary": {
-          "type": "string"
         },
         "category": {
           "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
         }
-      }
+      },
+      "required": [
+        "typeTransaction",
+        "sum",
+        "date"
+      ]
     },
     "categoriesSuccess": {
       "type": "object",
       "properties": {
         "status": {
-          "type": "object",
-          "properties": {
-            "code": {
-              "type": "string"
-            },
-            "message": {
-              "type": "string"
-            }
-          }
+          "type": "string",
+          "example": "success"
+        },
+        "code": {
+          "type": "number",
+          "example": "200"
         },
         "data": {
           "type": "object",
           "properties": {
             "categories": {
               "type": "array",
+              "example": [
+                "lol",
+                "kek",
+                "cheburek"
+              ],
               "items": {
                 "type": "string"
               }

@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
+const Joi = require('joi');
 const CreateError = require('http-errors');
-const { HTTP_STATUS_CODE, MESSAGES } = require('../helpers/constants.js');
+const { HTTP_STATUS_CODE, MESSAGES, USER_NAME_LIMIT, USER_PASSWORD_LIMIT } = require('../helpers/constants.js');
+const { regexName, regexEmail } = require('../helpers/regex');
 
 const { User } = require('../models/User-model.js');
 
@@ -42,4 +44,48 @@ const validateBody = (scheme) => async (req, res, next) => {
     }
 };
 
-module.exports = {validateAuth, validateBody}
+
+const validationSignupUser = Joi.object({
+  name: Joi.string()
+    .pattern(regexName)
+    .min(USER_NAME_LIMIT.MIN)
+    .max(USER_NAME_LIMIT.MAX)
+    .required()
+    .messages({
+      'any.required': 'Name is required',
+      'string.empty': 'The name cannot be empty',
+    }),
+  email: Joi.string().pattern(regexEmail).required().messages({
+    'any.required': 'Email is required',
+    'string.empty': 'The email cannot be empty',
+  }),
+  password: Joi.string()
+    .min(USER_PASSWORD_LIMIT.MIN)
+    .max(USER_PASSWORD_LIMIT.MAX)
+    .required()
+    .messages({
+      'any.required': 'Password is required',
+      'string.empty': 'The password cannot be empty',
+    })
+});
+
+
+
+
+const validationLoginUser = Joi.object({
+  email: Joi.string().pattern(regexEmail).required().messages({
+    'any.required': 'Email is required',
+    'string.empty': 'The email cannot be empty',
+  }),
+  password: Joi.string()
+    .min(USER_PASSWORD_LIMIT.MIN)
+    .max(USER_PASSWORD_LIMIT.MAX)
+    .required()
+    .messages({
+      'any.required': 'Password is required',
+      'string.empty': 'The password cannot be empty',
+    }),
+});
+
+
+module.exports = { validateAuth, validateBody, validationSignupUser, validationLoginUser };

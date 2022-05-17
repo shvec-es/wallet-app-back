@@ -1,13 +1,13 @@
 const { WalletModel } = require('../models/Transaction-model.js')
+const dataCategories = require('../data/categories.json')
 
 class Transactions{
     async createTransaction(req, res){
         try {
             const { _id } = req.user;
-            if(req.body.typeTransaction && !req.body.category){
-                req.body.category = "other"
+            if(!req.body.typeTransaction && !req.body.category){
+                req.body.category = "Other expences"
             }
-            console.log(req.body)
             const newTransaction = await WalletModel.create({...req.body, owner: _id});
             return res
                 .status(201)
@@ -20,13 +20,7 @@ class Transactions{
     }
 
     async getCategories(req, res){
-        const { _id } = req.user;
-        const transactions = await WalletModel.find({owner: _id});
-        const categories = [];
-        transactions.forEach(el => {
-            if(!categories.includes(el.category) && el.category !== undefined) categories.push(el.category)
-        })
-        return res.json({ status: "success", code: 200, payload: { categories } });
+        return res.json({ status: "success", code: 200, payload: dataCategories.categories });
     }
 
     async getTransactions(req, res){
@@ -40,6 +34,7 @@ class Transactions{
         const {month, year} = req.query;
         const transactions = await WalletModel.find({owner: _id});
         const sortingTransactions = [];
+        const data = {}
         const balance = {
             income: 0,
             consumption: 0,
@@ -48,11 +43,21 @@ class Transactions{
         for(const trans of transactions){
             const currDate = trans.date.slice(3,trans.date.length)
             if(`${month}.${year}` === currDate) {
-                sortingTransactions.push(trans)
                 if(trans.typeTransaction) balance.income += trans.sum;
-                if(!trans.typeTransaction) balance.consumption += trans.sum;
+                if(!trans.typeTransaction) {
+                    if(!data[trans.category]) data[trans.category] = 0
+                    data[trans.category] += trans.sum
+                    balance.consumption += trans.sum
+                }
             }
-
+        }
+        for(const key in data){
+            const categoryColor = dataCategories.categories.find(i => i.name === key)
+            sortingTransactions.push({
+                name: categoryColor.name,
+                sum: data[key],
+                color: categoryColor.color
+            })
         }
         balance.balance = balance.income - balance.consumption
         return res.json({ status: "success", code: 200, payload: { sortingTransactions, balance: balance } });

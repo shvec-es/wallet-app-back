@@ -1,0 +1,40 @@
+{
+  "categories": [
+    {
+      "color": "#FED057",
+      "name": "Main expences"
+    },
+    {
+      "color": "#FFD8D0",
+      "name": "Food"
+    },
+    {
+      "color": "#FD9498",
+      "name": "Car"
+    },
+    {
+      "color": "#C5BAFF",
+      "name": "Selfcare"
+    },
+    {
+      "color": "#6E78E8",
+      "name": "Children"
+    },
+    {
+      "color": "#4A56E2",
+      "name": "Household goods"
+    },
+    {
+      "color": "#81E1FF",
+      "name": "Education"
+    },
+    {
+      "color": "#24CCA7",
+      "name": "Leisure"
+    },
+    {
+      "color": "#00AD84",
+      "name": "Other expences"
+    }
+  ]
+}

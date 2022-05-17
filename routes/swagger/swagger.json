@@ -52,6 +52,49 @@
         }
       }
     },
+    "/api/users/verify": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Send verification email again.",
+        "description": "This sends a verification email one more time.",
+        "operationId": "sendVerificationEmailAgain",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "avisalom.peremychniy@mail.com"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successful. Email sent",
+            "schema": {
+              "$ref": "#/definitions/emailResendSuccess"
+            }
+          },
+          "400": {
+            "description": "Invalid credentials supplied",
+            "schema": {
+              "$ref": "#/definitions/badRequest"
+            }
+          }
+        }
+      }
+    },
     "/api/auth/signup": {
       "post": {
         "tags": [
@@ -315,6 +358,28 @@
         "password"
       ]
     },
+    "emailResendSuccess": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "code": {
+          "type": "number",
+          "example": "200"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "isVerifyEmailSent": {
+              "type": "boolean",
+              "example": "true"
+            }
+          }
+        }
+      }
+    },
     "registerSuccess": {
       "type": "object",
       "properties": {
@@ -341,6 +406,10 @@
                   "example": "avisalom.peremychniy@mail.com"
                 }
               }
+            },
+            "isVerifyEmailSent": {
+              "type": "boolean",
+              "example": "true"
             }
           }
         }

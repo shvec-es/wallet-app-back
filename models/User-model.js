@@ -8,6 +8,8 @@ const {
     USER_PASSWORD_LIMIT,
 } = require('../helpers/constants.js');
 
+const { randomUUID } = require('crypto')
+
 const {Schema, model} = mongoose
 
 
@@ -51,6 +53,14 @@ const userSchema = Schema(
       type: String,
       required: [false, "Token isn't required"],
       default: null,
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      default: randomUUID(),
     },
   },
   { versionKey: false, timestamps: true },

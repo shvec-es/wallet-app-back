@@ -52,6 +52,49 @@
         }
       }
     },
+    "/api/users/verify": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Send verification email again.",
+        "description": "This sends a verification email one more time.",
+        "operationId": "sendVerificationEmailAgain",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "avisalom.peremychniy@mail.com"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successful. Email sent",
+            "schema": {
+              "$ref": "#/definitions/emailResendSuccess"
+            }
+          },
+          "400": {
+            "description": "Invalid credentials supplied",
+            "schema": {
+              "$ref": "#/definitions/badRequest"
+            }
+          }
+        }
+      }
+    },
     "/api/auth/signup": {
       "post": {
         "tags": [
@@ -315,6 +358,28 @@
         "password"
       ]
     },
+    "emailResendSuccess": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "code": {
+          "type": "number",
+          "example": "200"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "isVerifyEmailSent": {
+              "type": "boolean",
+              "example": "true"
+            }
+          }
+        }
+      }
+    },
     "registerSuccess": {
       "type": "object",
       "properties": {
@@ -341,6 +406,10 @@
                   "example": "avisalom.peremychniy@mail.com"
                 }
               }
+            },
+            "isVerifyEmailSent": {
+              "type": "boolean",
+              "example": "true"
             }
           }
         }
@@ -570,32 +639,36 @@
             "sortingTransactions": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/transactionResponse"
-              },
-              "example": [
-                {
-                  "typeTransaction": true,
-                  "sum": 2598,
-                  "date": "15.05.2022",
-                  "description": "groceries",
-                  "category": "other",
-                  "owner": "21e7ab08-a674-4abf-8511-b811aee7a3f4",
-                  "_id": "e9f644a6-81f1-48ad-819d-2dc5bfdecb99",
-                  "createdAt": "2022-05-16T10:34:53.652Z",
-                  "updatedAt": "2022-05-16T10:34:53.652Z"
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "sum": {
+                    "type": "number"
+                  },
+                  "color": {
+                    "type": "string"
+                  }
                 },
-                {
-                  "typeTransaction": false,
-                  "sum": 1649,
-                  "date": "14.05.2022",
-                  "description": "Bought a brand new iphone XXL plus pro max edge",
-                  "category": "squander",
-                  "owner": "21e7ab08-a674-4abf-8511-b811aee7a3f4",
-                  "_id": "e9f644f7-81f1-48ad-819d-2dc5bfdecb98",
-                  "createdAt": "2022-05-14T11:37:53.652Z",
-                  "updatedAt": "2022-05-14T11:37:53.652Z"
-                }
-              ]
+                "example": [
+                  {
+                    "name": "Goods",
+                    "sum": 15000,
+                    "color": "#L309H1"
+                  },
+                  {
+                    "name": "Other expenses",
+                    "sum": 100,
+                    "color": "#1209E2"
+                  },
+                  {
+                    "name": "Education",
+                    "sum": 25980,
+                    "color": "#K709F1"
+                  }
+                ]
+              }
             },
             "balance": {
               "type": "object",
@@ -659,14 +732,31 @@
           "properties": {
             "categories": {
               "type": "array",
-              "example": [
-                "lol",
-                "kek",
-                "cheburek"
-              ],
               "items": {
-                "type": "string"
-              }
+                "type": "object",
+                "properties": {
+                  "color": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": [
+                {
+                  "color": "#K709F1",
+                  "name": "Education"
+                },
+                {
+                  "color": "#L309H1",
+                  "name": "Goods"
+                },
+                {
+                  "color": "#L309H1",
+                  "name": "Other expenses"
+                }
+              ]
             }
           }
         }

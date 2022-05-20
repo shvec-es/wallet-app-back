@@ -23,6 +23,7 @@ const signup = async (req, res) => {
   });
 
   newUser.setHashPassword(password);
+  newUser.setToken();
   newUser.save();
 
   const emailService = new EmailService(process.env.NODE_ENV, new SenderSendgrid())
@@ -37,6 +38,7 @@ const signup = async (req, res) => {
         email: newUser.email
       },
       isVerifyEmailSent: isVerifyEmailSent,
+      token: newUser.token
     },
   });
 };
@@ -50,12 +52,13 @@ const login = async (req, res) => {
 
   if (!userExist || !userExist.comparePassword(password)) {
     throw new CreateError(`Invalid credentials`);
-  } else if (!userExist.verified) {
+  }  
+  else if (!userExist.verified) {
     res.json({ status: STATUS.FAIL, code: HttpCode.NOT_FOUND, message: "user was not verified" })
     return
   }
 
-  userExist.setToken();
+ 
   userExist.save();
 
   res.json({

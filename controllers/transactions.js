@@ -52,6 +52,7 @@ class Transactions{
         const transactions = await WalletModel.find({owner: _id});
         const sortingTransactions = [];
         const data = {}
+        const date = []
         const balance = {
             income: 0,
             consumption: 0,
@@ -76,8 +77,30 @@ class Transactions{
                 color: categoryColor.color
             })
         }
+        const getData = () => {
+            transactions.forEach(el => {
+                if(!el.typeTransaction){
+                    date.push({
+                        month: el.date.slice(3,5),
+                        year: el.date.slice(6,10)
+                    })
+                }
+            })
+            return date.filter((el,i) => {
+                return JSON.stringify(el) !== JSON.stringify(date[i + 1])
+            })
+        }
+
         balance.balance = balance.income - balance.consumption
-        return res.json({ status: "success", code: 200, payload: { sortingTransactions, balance: balance } });
+        return res.json({
+            status: "success",
+            code: 200,
+            payload: {
+                sortingTransactions,
+                balance: balance,
+                date: getData()
+            }
+        });
     }
 }
 

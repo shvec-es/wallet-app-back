@@ -79,9 +79,6 @@ userSchema.methods.setToken = function () {
   this.token = jwt.sign({ id: this._id }, SECRET_KEY, { expiresIn: '1h' });
 };
 
-userSchema.methods.updateSubscription = function (newSubscription) {
-  this.subscription = newSubscription;
-};
 
 const User = model('user', userSchema);
 

@@ -26,7 +26,24 @@ class Transactions{
     async getTransactions(req, res){
         const { _id } = req.user;
         const transactions = await WalletModel.find({owner: _id});
-        return res.json({ status: "success", code: 200, payload: { transactions } });
+
+        const sortingTransactionsByDate = transactions.sort((a,b) => {
+            const onChangeDate = (date) => {
+                return new Date(date.date.replace(/[.]/gi, '-').split('-').reverse().join('-'))
+            }
+            return onChangeDate(a) - onChangeDate(b)
+        })
+
+        const addBalance = () => {
+            let balance  = 0;
+            return sortingTransactionsByDate.map(el => {
+                if(el.typeTransaction) balance += el.sum
+                if(!el.typeTransaction) balance -= el.sum
+                return {...el._doc, balance}
+            })
+        }
+
+        return res.json({ status: "success", code: 200, payload: addBalance() });
     }
 
     async getStats(req, res){

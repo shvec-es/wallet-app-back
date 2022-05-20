@@ -58,7 +58,7 @@ const login = async (req, res) => {
     return
   }
 
- 
+  userExist.setToken();
   userExist.save();
 
   res.json({

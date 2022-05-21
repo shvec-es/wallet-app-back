@@ -102,6 +102,23 @@ class Transactions{
             }
         });
     }
+
+    async deleteTransaction(req, res){
+        try {
+            const deletedTransaction = await WalletModel.findByIdAndDelete(
+                req.params.transactionId
+            );
+            return res.json({
+                status: "success",
+                code: 200,
+                payload: { deletedTransaction },
+            });
+        } catch (error) {
+            return res
+                .status(404)
+                .json({ status: "error", code: 404, message: "Not Found" });
+        }
+    }
 }
 
 module.exports = new Transactions

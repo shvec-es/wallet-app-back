@@ -13,4 +13,6 @@ Wallet.get('/transactions', validateAuth, Transactions.getTransactions)
 
 Wallet.get('/stats', validateAuth, Transactions.getStats)
 
+Wallet.delete("/transaction/:transactionId", validateAuth, Transactions.deleteTransaction);
+
 module.exports = Wallet;

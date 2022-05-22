@@ -4,15 +4,17 @@ const EmailService = require("../service/email/service");
 const SenderSendgrid = require("../service/email/sender");
 const HttpCode = require("../lib/constants")
 
-const verifyUser = async (req, res, next) => {
+const verifyUser = async (req, res) => {
     const verifyToken = req.params.token
     const userFromToken = await repositoryUsers.findByVerifyToken(verifyToken)
     
     if (userFromToken) {
         await repositoryUsers.updateVerify(userFromToken.id, true)
+        await userFromToken.save();
         res
-        .status(HttpCode.OK)
-        .json({ status: 'success', code: HttpCode.OK, data: { message: 'success' } })
+        // .status(HttpCode.OK)
+        // .json({ status: 'success', code: HttpCode.OK, data: { message: 'success' } })
+        .redirect('http://wallet-codowriters.netlify.app')
         
     } else {
         res

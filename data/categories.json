@@ -33,17 +33,17 @@
     {
       "color": "#81E1FF",
       "name": "Education",
-      "nameUA": "Образование"
+      "nameUA": "Освiта"
     },
     {
       "color": "#24CCA7",
       "name": "Leisure",
-      "nameUA": "Досуг"
+      "nameUA": "Дозвілля"
     },
     {
       "color": "#00AD84",
       "name": "Other expences",
-      "nameUA": "Другие расходы"
+      "nameUA": "Інші витрати"
     }
   ]
 }

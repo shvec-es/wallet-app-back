@@ -2,39 +2,48 @@
   "categories": [
     {
       "color": "#FED057",
-      "name": "Main expences"
+      "name": "Main expences",
+      "nameUA": "Основні витрати"
     },
     {
       "color": "#FFD8D0",
-      "name": "Food"
+      "name": "Food",
+      "nameUA": "Продукти"
     },
     {
       "color": "#FD9498",
-      "name": "Car"
+      "name": "Car",
+      "nameUA": "Авто"
     },
     {
       "color": "#C5BAFF",
-      "name": "Selfcare"
+      "name": "Selfcare",
+      "nameUA": "Турбота про себе"
     },
     {
       "color": "#6E78E8",
-      "name": "Children"
+      "name": "Children",
+      "nameUA": "Турбота про дітей"
     },
     {
       "color": "#4A56E2",
-      "name": "Household goods"
+      "name": "Household goods",
+      "nameUA": "Товари для дому"
     },
     {
       "color": "#81E1FF",
-      "name": "Education"
+      "name": "Education",
+      "nameUA": "Образование"
     },
     {
       "color": "#24CCA7",
-      "name": "Leisure"
+      "name": "Leisure",
+      "nameUA": "Досуг"
     },
     {
       "color": "#00AD84",
-      "name": "Other expences"
+      "name": "Other expences",
+      "nameUA": "Другие расходы"
     }
   ]
 }

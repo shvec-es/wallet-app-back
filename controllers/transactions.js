@@ -26,8 +26,16 @@ class Transactions{
     async getTransactions(req, res){
         const { _id } = req.user;
         const transactions = await WalletModel.find({owner: _id});
+        const changedTransactions = []
 
-        const sortingTransactionsByDate = transactions.sort((a,b) => {
+        transactions.forEach(el => {
+            if(!el.typeTransaction){
+                const categoryColor = dataCategories.categories.find(i => i.name === el.category)
+                changedTransactions.push({...el._doc, categoryUA: categoryColor.nameUA})
+            }
+        })
+
+        const sortingTransactionsByDate = changedTransactions.sort((a,b) => {
             const onChangeDate = (date) => {
                 return new Date(date.date.replace(/[.]/gi, '-').split('-').reverse().join('-'))
             }
@@ -39,7 +47,7 @@ class Transactions{
             return sortingTransactionsByDate.map(el => {
                 if(el.typeTransaction) balance += el.sum
                 if(!el.typeTransaction) balance -= el.sum
-                return {...el._doc, balance}
+                return {...el, balance}
             })
         }
 

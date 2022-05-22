@@ -73,6 +73,7 @@ class Transactions{
             const categoryColor = dataCategories.categories.find(i => i.name === key)
             sortingTransactions.push({
                 name: categoryColor.name,
+                nameUA: categoryColor.nameUA,
                 sum: data[key],
                 color: categoryColor.color
             })

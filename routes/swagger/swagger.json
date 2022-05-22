@@ -227,6 +227,45 @@
         }
       }
     },
+    "/wallet/transaction/{transactionId}": {
+      "delete": {
+        "tags": [
+          "wallet"
+        ],
+        "summary": "Deletes a transaction.",
+        "description": "This deletes a transaction. <strong>Requires bearer token.</strong>",
+        "operationId": "deleteTransaction",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "transactionId",
+            "type": "string",
+            "required": true,
+            "description": "The ID of the transaction"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/transactionDeleteSuccess"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/badRequest"
+            }
+          },
+          "401": {
+            "$ref": "#/definitions/unauthorized"
+          }
+        }
+      }
+    },
     "/wallet/transaction/categories": {
       "get": {
         "tags": [
@@ -441,6 +480,27 @@
           "type": "object",
           "properties": {
             "newTransaction": {
+              "$ref": "#/definitions/transactionResponse"
+            }
+          }
+        }
+      }
+    },
+    "transactionDeleteSuccess": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "code": {
+          "type": "number",
+          "example": "200"
+        },
+        "payload": {
+          "type": "object",
+          "properties": {
+            "deletedTransaction": {
               "$ref": "#/definitions/transactionResponse"
             }
           }

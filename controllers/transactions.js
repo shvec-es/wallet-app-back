@@ -29,9 +29,12 @@ class Transactions{
         const changedTransactions = []
 
         transactions.forEach(el => {
-            if(!el.typeTransaction){
-                const categoryColor = dataCategories.categories.find(i => i.name === el.category)
-                changedTransactions.push({...el._doc, categoryUA: categoryColor.nameUA})
+            if(el.category === undefined){
+                changedTransactions.push({...el._doc})
+            }
+            if(el.category !== undefined){
+            const categoryColor = dataCategories.categories.find(i => i.name === el.category)
+            changedTransactions.push({...el._doc, categoryUA: categoryColor.nameUA})
             }
         })
 

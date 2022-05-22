@@ -9,9 +9,30 @@ class Transactions{
                 req.body.category = "Other expences"
             }
             const newTransaction = await WalletModel.create({...req.body, owner: _id});
+
+            const transactions = await WalletModel.find({owner: _id});
+
+            const sortingTransactionsByDate = transactions.sort((a,b) => {
+                const onChangeDate = (date) => {
+                    return new Date(date.date.replace(/[.]/gi, '-').split('-').reverse().join('-'))
+                }
+                return onChangeDate(a) - onChangeDate(b)
+            })
+
+            let balance = 0;
+
+            sortingTransactionsByDate.forEach(el => {
+                if(el.typeTransaction){
+                    balance += el.sum
+                }
+                if(!el.typeTransaction){
+                    balance -= el.sum
+                }
+            })
+
             return res
                 .status(201)
-                .json({ status: "success", code: 201, payload: { newTransaction } });
+                .json({ status: "success", code: 201, payload: { ...newTransaction._doc, balance } });
         } catch (error) {
             return res
                 .status(400)
